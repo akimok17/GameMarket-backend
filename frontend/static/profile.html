@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Профиль — GameMarket</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="header"><div class="container"><div class="header-top">
+  <a href="/" class="logo"><span class="logo-icon">🎮</span><span class="logo-text">Game<span class="logo-highlight">Market</span></span></a>
+  <div class="header-actions"><a href="/support" class="btn-header-link">🛟 Поддержка</a><a href="/" class="btn-profile">← Маркет</a><button class="btn-logout" id="logoutProfile">Выйти</button></div>
+</div></div></header>
+
+<main class="main"><div class="container"><div class="profile-page">
+<aside class="profile-sidebar">
+  <div class="profile-avatar"><div class="avatar-circle">👤</div><h2 id="profileUsername">...</h2><span id="profileBadge" class="profile-badge"></span><div id="profileVerifyBadge" style="margin-top:10px"></div></div>
+  <div class="profile-stats"><div class="stat-item"><span id="statRating" class="stat-value">0</span><span class="stat-label">⭐ Рейтинг</span></div><div class="stat-item"><span id="statSales" class="stat-value">0</span><span class="stat-label">📦 Продаж</span></div><div class="stat-item"><span id="statOrders" class="stat-value">0</span><span class="stat-label">📋 Заказов</span></div></div>
+  <div class="balance-card-profile">
+    <h3>Баланс</h3>
+    <div id="profileBalance" class="balance-amount">0 ₽</div>
+    <div class="balance-breakdown">
+      <div><span>Зарезервировано</span><strong id="profileFrozen">0 ₽</strong></div>
+      <div><span>Можно вывести</span><strong id="profileWithdrawable">0 ₽</strong></div>
+    </div>
+    <div class="balance-actions"><button class="btn-deposit" id="openDeposit">＋ Пополнить</button><button class="btn-withdraw" id="openWithdraw">− Вывести</button></div>
+    <div id="paymentProviderNote" class="micro-note"></div>
+  </div>
+</aside>
+
+<section class="profile-content">
+  <div class="profile-tabs" role="tablist"><button class="tab-btn active" data-tab="info">Информация</button><button class="tab-btn" data-tab="security">Безопасность</button><button class="tab-btn" data-tab="reviews">Отзывы</button><button class="tab-btn" data-tab="history">История</button><button class="tab-btn" data-tab="deposits">Пополнения</button><button class="tab-btn" data-tab="withdrawals">Выводы</button></div>
+
+  <div class="tab-content active" id="tab-info"><form id="profileForm" class="profile-form"><div class="form-group"><label>Имя</label><input id="editFullName"></div><div class="form-group"><label>Email</label><input type="email" id="editEmail"></div><div class="form-group"><label>Телефон</label><input id="editPhone" placeholder="+7 999 123-45-67" inputmode="tel"></div><button class="btn-save-profile">Сохранить</button></form><div class="notice" style="margin-top:16px">При смене email или телефона подтверждение нового контакта сбрасывается. Для реального вывода по СБП используется только подтверждённый номер аккаунта.</div></div>
+
+  <div class="tab-content" id="tab-security">
+    <div class="section-header" style="margin-bottom:14px"><h3>Подтверждение аккаунта</h3><span id="overallVerification"></span></div>
+    <div class="security-grid">
+      <div class="security-card"><div class="verification-row"><h4>📧 Email</h4><span id="emailStatus" class="status-pill warn">Не подтверждён</span></div><p id="emailDestination">—</p><button id="requestEmailCode" class="btn-secondary">Получить код</button><div class="otp-box"><input id="emailCode" maxlength="6" inputmode="numeric" autocomplete="one-time-code" placeholder="000000"><button id="confirmEmailCode" class="btn-success">Подтвердить</button></div><div id="emailDevCode" class="dev-code-note"></div></div>
+      <div class="security-card"><div class="verification-row"><h4>📱 Телефон</h4><span id="phoneStatus" class="status-pill warn">Не подтверждён</span></div><p id="phoneDestination">Добавь телефон во вкладке «Информация».</p><button id="requestPhoneCode" class="btn-secondary">Получить SMS-код</button><div class="otp-box"><input id="phoneCode" maxlength="6" inputmode="numeric" autocomplete="one-time-code" placeholder="000000"><button id="confirmPhoneCode" class="btn-success">Подтвердить</button></div><div id="phoneDevCode" class="dev-code-note"></div></div>
+      <div class="security-card"><h4>🔐 Смена пароля</h4><p>Используй отдельный пароль, который не применяется на других сайтах.</p><form id="passwordForm"><div class="form-group"><label>Текущий пароль</label><input type="password" id="currentPassword" autocomplete="current-password" required></div><div class="form-group"><label>Новый пароль</label><input type="password" id="newPassword" minlength="8" autocomplete="new-password" required></div><button class="btn-secondary">Сменить пароль</button></form></div>
+      <div class="security-card"><h4>🛡️ Статус аккаунта</h4><p id="verificationPolicyText">Требования к подтверждению загружаются…</p><div id="securitySummary"></div></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-reviews"><div id="reviewsList"></div></div>
+  <div class="tab-content" id="tab-history"><div id="historyList"></div></div>
+  <div class="tab-content" id="tab-deposits"><div id="depositsList"></div></div>
+  <div class="tab-content" id="tab-withdrawals"><div id="withdrawalsList"></div></div>
+</section>
+</div></div></main>
+
+<div id="depositModal" class="modal" style="display:none"><div class="modal-content payment-modal"><span class="close">&times;</span><h3>Пополнение баланса</h3><p id="depositNote" class="notice">Загрузка способов оплаты…</p><form id="depositForm"><div class="form-group"><label>Сумма, ₽</label><input type="number" id="depositAmount" min="1" step="0.01" required></div><button class="btn-submit" id="depositSubmit">Перейти к оплате</button></form></div></div>
+
+<div id="withdrawModal" class="modal" style="display:none"><div class="modal-content payment-modal"><span class="close">&times;</span><h3>Вывод средств</h3><p id="withdrawNote" class="notice">Доступен только заработок продавца. Сумма резервируется до завершения выплаты.</p><form id="withdrawForm"><div class="form-group"><label>Сумма, ₽</label><input type="number" id="withdrawAmount" min="1" step="0.01" required></div><div id="sbpFields" style="display:none"><div class="form-group"><label>Подтверждённый телефон</label><input id="withdrawPhone" readonly></div><div class="form-group"><label>Банк СБП</label><select id="withdrawBank"><option value="">Загрузка банков…</option></select></div></div><div id="manualFields" style="display:none"><div class="form-group"><label>Способ</label><select id="walletType"><option value="card">Банковская карта</option><option value="sbp">СБП</option><option value="crypto">Криптокошелёк</option><option value="other">Другое</option></select></div><div class="form-group"><label>Реквизиты</label><input id="walletAddress"></div></div><button class="btn-submit" id="withdrawSubmit">Создать заявку</button></form></div></div>
+
+<div id="toastWrap" class="toast-wrap"></div><script src="/static/profile.js"></script>
+</body></html>

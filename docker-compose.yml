@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: marketplace
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me_local_only}
+    volumes:
+      - gamemarket_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d marketplace"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment:
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-change_me_local_only}@db:5432/marketplace
+      SECRET_KEY: ${SECRET_KEY:-dev-secret-change-me}
+      CONTENT_ENCRYPTION_KEY: ${CONTENT_ENCRYPTION_KEY:-}
+      ALLOW_DEV_DEPOSITS: "true"
+      CREATE_TABLES_ON_STARTUP: "true"
+      CORS_ORIGINS: http://localhost:8000,http://127.0.0.1:8000
+volumes:
+  gamemarket_pg:

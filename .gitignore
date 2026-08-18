@@ -1,0 +1,28 @@
+.venv/
+__pycache__/
+*.py[cod]
+.env
+*.db
+.pytest_cache/
+.DS_Store
+storage/
+# IDE
+.idea/
+.vscode/
+
+# logs
+*.log
+logs/
+
+# uploads
+uploads/
+
+# temporary files
+*.tmp
+*.bak
+
+# OS
+Thumbs.db
+# IntelliJ IDEA
+.idea/
+*.iml

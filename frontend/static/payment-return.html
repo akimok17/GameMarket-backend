@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Возврат после оплаты — GameMarket</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <style>
+    .payment-return-shell{min-height:100vh;display:grid;place-items:center;padding:24px;background:#080a18;color:#eef0ff}
+    .payment-return-card{width:min(560px,100%);background:#141831;border:1px solid #2b3158;border-radius:24px;padding:32px;box-shadow:0 24px 70px rgba(0,0,0,.35);text-align:center}
+    .payment-return-logo{font-size:30px;font-weight:900;margin-bottom:18px}.payment-return-logo span{color:#7c5cff}
+    .payment-return-icon{font-size:48px;margin:8px 0 14px}.payment-return-card h1{font-size:24px;margin:0 0 10px}
+    .payment-return-card p{color:#aeb5d4;line-height:1.55;margin:0 0 22px}.payment-return-actions{display:grid;gap:10px}
+    .payment-return-actions a{display:block;text-decoration:none;padding:14px 18px;border-radius:14px;font-weight:800}
+    .payment-return-primary{background:linear-gradient(135deg,#7c5cff,#6641d8);color:#fff}.payment-return-secondary{border:1px solid #343b67;color:#dfe3ff;background:#1b203e}
+  </style>
+</head>
+<body>
+<main class="payment-return-shell">
+  <section class="payment-return-card">
+    <div class="payment-return-logo">Game<span>Market</span></div>
+    <div class="payment-return-icon">✓</div>
+    <h1>Возвращаемся в GameMarket</h1>
+    <p>Платёж будет подтверждён сервером по данным ЮKassa. Нажмите кнопку ниже, чтобы вернуться в приложение. Если приложение не открылось, просто вернитесь в него вручную — статус пополнения синхронизируется.</p>
+    <div class="payment-return-actions">
+      <a id="openApp" class="payment-return-primary" href="gamemarket://payment-return">Открыть GameMarket</a>
+      <a class="payment-return-secondary" href="/profile">Открыть веб-профиль</a>
+    </div>
+  </section>
+</main>
+<script>
+  const id=new URLSearchParams(location.search).get('deposit_id');
+  const app=document.getElementById('openApp');
+  if(id) app.href='gamemarket://payment-return?deposit_id='+encodeURIComponent(id);
+</script>
+</body>
+</html>

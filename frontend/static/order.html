@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Сделка — GameMarket</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="order-room-body">
+<header class="header order-room-header">
+  <div class="container"><div class="header-top">
+    <a href="/" class="logo"><span class="logo-icon">🎮</span><span class="logo-text">Game<span class="logo-highlight">Market</span></span></a>
+    <div class="header-actions">
+      <a href="/?section=ordersSection" class="btn-header-link">← Мои заказы</a>
+      <a id="orderSupportTop" href="/support" class="btn-header-link">🛟 Поддержка</a>
+      <a href="/profile" class="btn-profile">👤 Профиль</a>
+    </div>
+  </div></div>
+</header>
+
+<main class="order-room-main">
+  <div class="container">
+    <div id="orderRoomLoading" class="order-room-loading">Загружаем защищённую сделку…</div>
+    <div id="orderRoomError" class="order-room-error" style="display:none"></div>
+
+    <div id="orderRoomApp" style="display:none">
+      <section class="deal-head">
+        <div>
+          <a href="/?section=ordersSection" class="deal-back">← Заказы</a>
+          <div class="deal-kicker" id="dealKicker">Сделка</div>
+          <h1 id="dealTitle">Заказ</h1>
+          <div class="deal-meta" id="dealMeta"></div>
+        </div>
+        <div class="deal-head-right">
+          <div class="deal-price" id="dealPrice">0 ₽</div>
+          <span class="deal-status" id="dealStatus">—</span>
+        </div>
+      </section>
+
+      <div class="deal-grid">
+        <section class="deal-chat-card">
+          <div class="deal-chat-head">
+            <div class="deal-user-avatar" id="chatAvatar">?</div>
+            <div class="deal-chat-person">
+              <strong id="chatPerson">Участник сделки</strong>
+              <span id="chatPresence"><i class="presence-dot"></i> статус неизвестен</span>
+            </div>
+            <div class="deal-chat-head-actions">
+              <span class="deal-safe-mini">🔒 Чат сделки</span>
+            </div>
+          </div>
+          <div class="deal-chat-notice">⚠️ Не подтверждайте заказ, пока не получили и не проверили товар. Переписка сохраняется для разрешения споров.</div>
+          <div id="orderChatFeed" class="order-chat-feed"></div>
+          <div id="typingIndicator" class="typing-indicator"></div>
+          <div class="order-compose" id="orderCompose">
+            <label class="attach-button" title="Отправить скриншот">
+              📎<input id="orderAttachment" type="file" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+            </label>
+            <textarea id="orderMessage" maxlength="4000" rows="1" placeholder="Напишите сообщение по заказу…"></textarea>
+            <button id="orderSend" class="order-send-btn">➤</button>
+          </div>
+        </section>
+
+        <aside class="deal-sidebar">
+          <section class="deal-side-card protection-card">
+            <div class="side-title"><span>🛡️</span><strong>Защита сделки</strong></div>
+            <div id="escrowText" class="protection-text"></div>
+            <div class="escrow-line"><span>Сумма заказа</span><strong id="sideTotal">0 ₽</strong></div>
+            <div class="escrow-line" id="sellerEarningsRow" style="display:none"><span>К зачислению</span><strong id="sideEarnings">0 ₽</strong></div>
+            <div class="escrow-line muted"><span>Комиссия площадки</span><span id="sideCommission">0 ₽</span></div>
+          </section>
+
+          <section id="deliveryCard" class="deal-side-card delivery-card" style="display:none">
+            <div class="side-title"><span>🔐</span><strong>Полученный товар</strong></div>
+            <p>Проверьте данные перед подтверждением. Они доступны только сторонам этой сделки.</p>
+            <pre id="deliveryContent"></pre>
+            <button id="copyDelivery" class="btn-secondary wide">📋 Скопировать</button>
+          </section>
+
+          <section class="deal-side-card">
+            <div class="side-title"><span>📦</span><strong>О заказе</strong></div>
+            <div class="detail-list">
+              <div><span>Заказ</span><b id="sideOrderId">#—</b></div>
+              <div><span>Товар</span><b id="sideProduct">—</b></div>
+              <div><span>Категория</span><b id="sideCategory">—</b></div>
+              <div><span>Количество</span><b id="sideQuantity">1</b></div>
+              <div><span>Тип выдачи</span><b id="sideFulfillment">—</b></div>
+              <div><span>Создан</span><b id="sideCreated">—</b></div>
+            </div>
+          </section>
+
+          <section class="deal-side-card seller-card">
+            <div class="side-title"><span>👤</span><strong id="sellerTitle">Продавец</strong><span id="sellerVerified"></span></div>
+            <div class="seller-identity"><div class="seller-avatar" id="sellerAvatar">?</div><div><strong id="sellerName">—</strong><span id="sellerOnlineText">—</span></div></div>
+            <div class="seller-rating" id="sellerRating"></div>
+            <div class="seller-stats-grid">
+              <div><b id="statSales">—</b><span>продаж</span></div>
+              <div><b id="statSuccess">—</b><span>успешно</span></div>
+              <div><b id="statDisputes">—</b><span>споров</span></div>
+              <div><b id="statResponse">—</b><span>ответ</span></div>
+            </div>
+            <a id="sellerProfileLink" class="btn-secondary wide" style="margin-top:10px;text-decoration:none" href="#">Посмотреть профиль</a>
+          </section>
+
+          <section class="deal-side-card deal-actions-card">
+            <div class="side-title"><span>⚡</span><strong>Действия</strong></div>
+            <div id="dealActions" class="deal-actions"></div>
+            <a id="supportFromOrder" class="btn-secondary wide support-from-order" href="/support">🛟 Помощь по заказу</a>
+          </section>
+        </aside>
+      </div>
+
+      <section class="deal-timeline-card">
+        <div class="timeline-head"><div><span>🕘</span><strong>История сделки</strong></div><span id="autoCompleteText"></span></div>
+        <div id="dealTimeline" class="deal-timeline"></div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<div id="deliveryModal" class="modal" style="display:none"><div class="modal-content order-action-modal"><span class="close">&times;</span><h3>📦 Передать товар покупателю</h3><p class="modal-help">Передавайте данные только после фактического выполнения заказа. После отправки покупатель сможет проверить их и подтвердить сделку.</p><div class="form-group"><label>Данные / ключ / результат работы</label><textarea id="deliveryInput" rows="8" maxlength="20000" placeholder="Например: логин, пароль, ключ активации или инструкция…"></textarea></div><button id="submitDelivery" class="btn-submit">Передать покупателю</button></div></div>
+
+<div id="disputeModal" class="modal" style="display:none"><div class="modal-content order-action-modal"><span class="close">&times;</span><h3>⚖️ Открыть спор</h3><p class="modal-help">Средства останутся в резерве до решения проблемы.</p><div class="form-group"><label>Причина</label><select id="disputeReason"><option>Товар не работает</option><option>Товар не соответствует описанию</option><option>Товар не получен</option><option>Продавец не отвечает</option><option>Покупатель не выполняет условия сделки</option><option>Другое</option></select></div><div class="form-group"><label>Подробности</label><textarea id="disputeDescription" rows="5" maxlength="5000" placeholder="Опишите проблему максимально подробно…"></textarea></div><button id="submitDispute" class="btn-danger wide">Открыть спор</button></div></div>
+
+<div id="reviewModal" class="modal" style="display:none"><div class="modal-content order-action-modal"><span class="close">&times;</span><h3>⭐ Оценить сделку</h3><div class="review-stars" id="reviewStars"><button data-rating="1">★</button><button data-rating="2">★</button><button data-rating="3">★</button><button data-rating="4">★</button><button data-rating="5">★</button></div><div class="form-group"><label>Комментарий</label><textarea id="reviewComment" rows="4" maxlength="3000" placeholder="Как прошла сделка?"></textarea></div><button id="submitReview" class="btn-submit">Оставить отзыв</button></div></div>
+
+<div id="toastWrap" class="toast-wrap"></div>
+<script src="/static/order.js"></script>
+</body>
+</html>

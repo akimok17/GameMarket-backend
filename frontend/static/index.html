@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameMarket — цифровые товары</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="header"><div class="container"><div class="header-top">
+  <a href="/" class="logo" aria-label="GameMarket"><span class="logo-icon">🎮</span><span class="logo-text">Game<span class="logo-highlight">Market</span></span></a>
+  <div class="header-actions">
+    <a href="/support" class="btn-header-link">🛟 Поддержка</a>
+    <button class="btn-sell" id="sellBtn">＋ Начать продажу</button>
+    <a href="/login" class="btn-login">Войти</a><a href="/register" class="btn-register">Регистрация</a>
+    <div class="notification-box auth-only" id="notificationBox" style="display:none">
+      <button id="notificationBtn" class="icon-btn" aria-label="Уведомления">🔔<span id="notificationCount" class="notification-count" style="display:none">0</span></button>
+      <div id="notificationPanel" class="notification-panel" style="display:none"><div class="notification-head"><strong>Уведомления</strong><button id="readAllNotifications">Прочитать все</button></div><div id="notificationList"></div></div>
+    </div>
+    <a href="/profile" class="btn-profile" id="profileLink" style="display:none">👤 Профиль</a>
+    <span id="userInfoHeader" class="user-chip" style="display:none"><span id="usernameDisplayHeader"></span><span id="verifyHeaderBadge" class="mini-verify-badge"></span><button class="btn-logout" id="logoutBtn">Выйти</button></span>
+  </div>
+</div></div></header>
+
+<nav class="nav-categories"><div class="container"><div class="categories-shell">
+  <button id="catScrollLeft" class="category-scroll-btn left" aria-label="Категории влево">‹</button>
+  <div id="categoriesNav" class="categories-scroll"></div>
+  <button id="catScrollRight" class="category-scroll-btn right" aria-label="Категории вправо">›</button>
+</div></div></nav>
+
+<main class="main"><div class="container">
+  <div id="verificationBanner" class="verification-banner" style="display:none">
+    <div><strong>Подтверди аккаунт</strong><span>Подтверждённый email или телефон нужен для продажи и вывода средств.</span></div>
+    <a href="/profile#security" class="btn-secondary">Подтвердить</a>
+  </div>
+
+  <div class="search-section">
+    <div class="search-bar"><input id="searchInput" placeholder="Поиск товаров, ключей, аккаунтов..."><button id="btnSearch">🔎 Найти</button></div>
+    <div class="filters-row">
+      <select id="sortSelect"><option value="new">Новые</option><option value="price_asc">Сначала дешёвые</option><option value="price_desc">Сначала дорогие</option><option value="popular">Популярные</option><option value="favorites">По избранному</option></select>
+      <div class="price-filter"><input type="number" id="minPrice" min="0" placeholder="от ₽"><span>—</span><input type="number" id="maxPrice" min="0" placeholder="до ₽"></div>
+      <button class="btn-filter" id="btnReset">Сбросить</button>
+    </div>
+  </div>
+
+  <div class="top-nav" id="appTabs">
+    <button class="nav-btn active" data-section="marketSection">🛍 Маркет</button>
+    <button class="nav-btn auth-only" data-section="favoritesSection" style="display:none">❤️ Избранное</button>
+    <button class="nav-btn seller-only" data-section="myProductsSection" style="display:none">📦 Мои товары</button>
+    <button class="nav-btn auth-only" data-section="ordersSection" style="display:none">📋 Заказы</button>
+  </div>
+  <div id="balanceStrip" class="balance-strip" style="display:none"></div>
+
+  <section id="marketSection" class="app-section active"><div class="section-header"><h2>🔥 Товары</h2><span id="productsCount" class="section-count"></span></div><div id="productsGrid" class="products-grid"></div></section>
+  <section id="favoritesSection" class="app-section"><div class="section-header"><h2>❤️ Избранное</h2></div><div id="favoritesGrid" class="products-grid"></div></section>
+  <section id="myProductsSection" class="app-section"><div class="section-header"><h2>📦 Мои товары</h2><button class="btn-create" id="btnCreateProduct">＋ Добавить товар</button></div><div id="myProductsGrid" class="products-grid"></div></section>
+  <section id="ordersSection" class="app-section"><div class="section-header"><h2>📋 Мои заказы</h2></div><div id="ordersList"></div></section>
+</div></main>
+
+<footer class="site-footer"><div class="container"><div><strong>GameMarket</strong><span>Маркетплейс цифровых товаров</span></div><div class="footer-links"><a href="/support">Поддержка</a><a href="/docs">API</a><a href="/profile">Безопасность аккаунта</a></div></div></footer>
+
+<div id="productModal" class="modal" style="display:none"><div class="modal-content"><span class="close">&times;</span><h3 id="modalTitle">＋ Новый товар</h3>
+<form id="productForm"><input type="hidden" id="productId">
+<div class="form-group"><label>Название</label><input id="prodTitle" required minlength="3"></div>
+<div class="inline-row"><div class="form-group"><label>Категория</label><select id="prodCategory"></select></div><div class="form-group"><label>Цена ₽</label><input type="number" id="prodPrice" min="0.01" step="0.01" required></div></div>
+<div class="form-group"><label>Описание</label><textarea id="prodDescription"></textarea></div>
+<div class="inline-row"><div class="form-group"><label>Выдача</label><select id="prodFulfillment"><option value="automatic">Автоматическая</option><option value="manual">Ручная</option></select></div><div class="form-group"><label>Время доставки</label><input id="prodDelivery" placeholder="Моментально / до 10 минут"></div></div>
+<div class="form-group" id="digitalItemsGroup"><label>Цифровые единицы — по одной на строку</label><textarea id="prodItems" placeholder="AAAA-BBBB-CCCC&#10;DDDD-EEEE-FFFF"></textarea><div class="notice">Данные хранятся отдельно и выдаются только оплаченной покупке.</div></div>
+<div class="form-group" id="manualStockGroup" style="display:none"><label>Количество ручного товара</label><input type="number" id="prodStock" min="0" value="1"></div>
+<button class="btn-submit" type="submit">Сохранить</button></form></div></div>
+
+<div id="orderModal" class="modal" style="display:none"><div class="modal-content"><span class="close">&times;</span><h3>🛒 Покупка</h3><div id="orderInfo"></div><button class="btn-submit" id="confirmPurchase">Оплатить с баланса</button></div></div>
+<div id="chatModal" class="modal" style="display:none"><div class="modal-content"><span class="close">&times;</span><h3>💬 Чат</h3><div id="chatMessages" class="chat-messages"></div><div class="inline-row"><input id="chatInput" placeholder="Сообщение..."><button class="btn-submit" id="chatSend" style="margin:0">Отправить</button></div></div></div>
+<div id="toastWrap" class="toast-wrap"></div>
+<script src="/static/script.js"></script>
+</body></html>
